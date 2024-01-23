@@ -28,7 +28,7 @@ class GrowthSteppable(SteppableBasePy):
     def step(self, mcs):
     
         for cell in self.cell_list_by_type(self.EPI):
-            cell.targetVolume += 0.05      
+            cell.targetVolume += 0.02      
 
         # # alternatively if you want to make growth a function of chemical concentration uncomment lines below and comment lines above        
 
@@ -94,10 +94,13 @@ class DeathSteppable(SteppableBasePy):
         SteppableBasePy.__init__(self, frequency)
 
     def step(self, mcs):
-        if mcs == 1000:
-            for cell in self.cell_list:
-                if cell.type==1:
-                    cell.targetVolume=0
-                    cell.lambdaVolume=100
+        if mcs >= 1000:
+            i=0
+            for i in range(5):
+                for cell in self.cell_list:
+                    if cell.type==1:
+                        cell.targetVolume-=0.05
+                        cell.lambdaVolume=100
+                i+=1
 
         
