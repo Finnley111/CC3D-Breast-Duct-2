@@ -18,6 +18,54 @@
       <Boundary_x>Periodic</Boundary_x>
       <Boundary_y>Periodic</Boundary_y>
    </Potts>
+
+      <!-- <Plugin Name="Secretion"> -->
+      
+      <!-- Specification of secretion properties of select cell types. -->
+      <!-- You may repeat Field element for each chemical field declared in the PDE solvers -->
+      <!-- Specification of secretion properties of individual cells can be done in Python -->
+      <!-- <Field Name="Nutrients"> -->
+         <!-- <ConstantConcentration Type="Medium">10.0</ConstantConcentration>
+      </Field> -->
+   <!-- </Plugin> -->
+   <Steppable Type="DiffusionSolverFE">
+      
+      <!-- Specification of PDE solvers -->
+      <DiffusionField Name="Nutrients">
+         <DiffusionData>
+            <FieldName>Nutrients</FieldName>
+            <GlobalDiffusionConstant>1</GlobalDiffusionConstant>
+            <GlobalDecayConstant>0</GlobalDecayConstant>
+            <!-- Additional options are: -->
+            <InitialConcentrationExpression>10</InitialConcentrationExpression>
+            <!-- <ConcentrationFileName>INITIAL CONCENTRATION FIELD - typically a file with path Simulation/NAME_OF_THE_FILE.txt</ConcentrationFileName> -->
+            <!-- <DiffusionCoefficient CellType="PROL">0.1</DiffusionCoefficient> -->
+            <!-- <DiffusionCoefficient CellType="QUIE">0.1</DiffusionCoefficient> -->
+            <!-- <DiffusionCoefficient CellType="NECR">0.1</DiffusionCoefficient> -->
+            <!-- <DecayCoefficient CellType="PROL">0.0001</DecayCoefficient> -->
+            <!-- <DecayCoefficient CellType="QUIE">0.0001</DecayCoefficient> -->
+            <!-- <DecayCoefficient CellType="NECR">0.0001</DecayCoefficient> -->
+         </DiffusionData>
+         <SecretionData>
+            <!-- When secretion is defined inside DissufionSolverFE all secretion constants are scaled automaticaly to account for the extra calls to the diffusion step when handling large diffusion constants -->
+            
+            <!-- Uniform secretion Definition -->
+            <!-- <Secretion Type="PROL">0.1</Secretion> -->
+            <!-- <Secretion Type="QUIE">0.1</Secretion> -->
+            <!-- <Secretion Type="NECR">0.1</Secretion> -->
+            <!-- <SecretionOnContact SecreteOnContactWith="PROL,QUIE,NECR" Type="NECR">0.2</SecretionOnContact> -->
+            <!-- <ConstantConcentration Type="NECR">0.1</ConstantConcentration> -->
+         </SecretionData>
+         <BoundaryConditions>
+            <Plane Axis="X">
+               <Periodic/>
+            </Plane>
+            <Plane Axis="Y">
+               <Periodic/>
+            </Plane>
+         </BoundaryConditions>
+      </DiffusionField>
+   </Steppable>
    
    <Plugin Name="CellType">
       
