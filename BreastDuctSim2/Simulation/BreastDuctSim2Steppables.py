@@ -1,6 +1,7 @@
 from cc3d.core.PySteppables import *
 import numpy as np
 import random
+import xml.etree.ElementTree as ET
 
 
 
@@ -30,7 +31,12 @@ class GrowthSteppable(SteppableBasePy):
         # field = self.field.Nutrients
 
         for cell in self.cell_list_by_type(self.EPI):
-            cell.targetVolume += 0.02      
+            
+            
+            if mcs > 1000:
+                cell.targetVolume += 0.1
+            else:
+                cell.targetVolume += 0.02
 
         # for cell in self.cell_list_by_type(self.EPI): 
         #     secretor.uptakeInsideCell(cell, 2.0, 0.01) 
@@ -71,6 +77,8 @@ class MitosisSteppable(MitosisSteppableBase):
             elif 1 not in neighbor_count_by_type_dict:
                 if cell.volume>25 and random.random() < 0.8:
                     cells_to_divide.append(cell)
+            elif mcs > 1000 and 1 in neighbor_count_by_type_dict and random.random() < 0.2 and cell.volume > 50:
+                cells_to_divide.append(cell)
                     
         for cell in cells_to_divide:
 
@@ -105,7 +113,7 @@ class DeathSteppable(SteppableBasePy):
     def step(self, mcs):
         if mcs >= 800:
             i=0
-            for i in range(5):
+            for i in range(5): # why is this range 5?
                 for cell in self.cell_list:
                     if cell.type==1:
                         cell.targetVolume-=0.1
