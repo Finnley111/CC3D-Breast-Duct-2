@@ -22,11 +22,4 @@ from BreastDuctSim2Steppables import MitosisSteppable
 CompuCellSetup.register_steppable(steppable=MitosisSteppable(frequency=1))
 
 
-
-
-from BreastDuctSim2Steppables import DeathSteppable
-
-CompuCellSetup.register_steppable(steppable=DeathSteppable(frequency=1))
-
-
 CompuCellSetup.run()
