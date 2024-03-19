@@ -22,7 +22,7 @@
       <!-- Listing all cell types in the simulation -->
       <CellType TypeId="0" TypeName="Medium"/>
       <!-- Lumen -->
-      <CellType TypeId="1" TypeName="LUM"/>
+      <CellType TypeId="1" TypeName="BOUND"/>
       <!-- Proliferative -->
       <CellType TypeId="2" TypeName="PROL"/>
       <!-- Quiescent -->
@@ -49,17 +49,17 @@
       <Energy Type1="Medium" Type2="PROL">15.0</Energy>
       <Energy Type1="Medium" Type2="QUIE">10.0</Energy>
       <Energy Type1="Medium" Type2="NECR">10.0</Energy>
-      <Energy Type1="Medium" Type2="LUM">30.0</Energy>
+      <Energy Type1="Medium" Type2="BOUND">30.0</Energy>
       <Energy Type1="PROL" Type2="PROL">10.0</Energy>
       <Energy Type1="PROL" Type2="QUIE">10.0</Energy>
       <Energy Type1="PROL" Type2="NECR">10.0</Energy>
       <Energy Type1="QUIE" Type2="QUIE">10.0</Energy>
       <Energy Type1="QUIE" Type2="NECR">10.0</Energy>
       <Energy Type1="NECR" Type2="NECR">10.0</Energy>
-      <Energy Type1="LUM" Type2="PROL">10.0</Energy>
-      <Energy Type1="LUM" Type2="QUIE">10.0</Energy>
-      <Energy Type1="LUM" Type2="NECR">10.0</Energy>
-      <Energy Type1="LUM" Type2="LUM">10.0</Energy>
+      <Energy Type1="BOUND" Type2="PROL">100.0</Energy>
+      <Energy Type1="BOUND" Type2="QUIE">100.0</Energy>
+      <Energy Type1="BOUND" Type2="NECR">10.0</Energy>
+      <Energy Type1="BOUND" Type2="BOUND">10.0</Energy>
       <NeighborOrder>4</NeighborOrder>
    </Plugin>
    
