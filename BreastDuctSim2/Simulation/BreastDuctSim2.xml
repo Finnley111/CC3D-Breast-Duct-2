@@ -46,7 +46,7 @@
    <Plugin Name="Contact">
       <!-- Specification of adhesion energies -->
       <Energy Type1="Medium" Type2="Medium">10.0</Energy>
-      <Energy Type1="Medium" Type2="PROL">10.0</Energy>
+      <Energy Type1="Medium" Type2="PROL">15.0</Energy>
       <Energy Type1="Medium" Type2="QUIE">10.0</Energy>
       <Energy Type1="Medium" Type2="NECR">10.0</Energy>
       <Energy Type1="Medium" Type2="LUM">30.0</Energy>
@@ -72,6 +72,12 @@
          <ConstantConcentration Type="Medium">100.0</ConstantConcentration>
       </Field>
    </Plugin>
+   
+   <Plugin Name="PixelTracker">
+   
+    <!-- Module tracking pixels of each cell -->
+    </Plugin>
+
    
    <Steppable Type="DiffusionSolverFE">
       
@@ -130,13 +136,6 @@
          <Gap>0</Gap>
          <Width>4</Width>
          <Types>PROL</Types>
-      </Region>
-      <Region>
-         <BoxMin x="110" y="110" z="0"/>
-         <BoxMax x="119" y="119" z="1"/>
-         <Gap>0</Gap>
-         <Width>10</Width>
-         <Types>LUM</Types>
       </Region>
    </Steppable>
 </CompuCell3D>
