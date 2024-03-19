@@ -49,12 +49,16 @@ class GrowthSteppable(SteppableBasePy):
             
             if field[cell.xCOM, cell.yCOM, 0]>66:
                     cell.type=self.PROL
-            elif mcs > 500 and field[cell.xCOM, cell.yCOM, 0]<10:
+            elif mcs > 500 and field[cell.xCOM, cell.yCOM, 0]<30:
                     cell.type=self.NECR
                     
         #kill the necrotic cells
         for cell in self.cell_list_by_type(self.NECR):
-            cell.targetVolume -= 1
+            secretor.uptakeInsideCell(cell, 2.0, 0.01)
+            if field[cell.xCOM, cell.yCOM, 0]<29:
+                self.delete_cell(cell)
+            
+            
         
         for cell in self.cell_list_by_type(self.LUM):
             neighbor_list = self.get_cell_neighbor_data_list(cell)
