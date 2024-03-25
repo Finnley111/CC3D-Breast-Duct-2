@@ -21,7 +21,7 @@
       
       <!-- Listing all cell types in the simulation -->
       <CellType TypeId="0" TypeName="Medium"/>
-      <!-- Lumen -->
+      <!-- BOUNDARY 1 -->
       <CellType TypeId="1" TypeName="BOUND"/>
       <!-- Proliferative -->
       <CellType TypeId="2" TypeName="PROL"/>
@@ -29,6 +29,10 @@
       <CellType TypeId="3" TypeName="QUIE"/>
       <!-- Necrotic -->
       <CellType TypeId="4" TypeName="NECR"/>
+      <!-- BOUNDARY 2 -->
+      <CellType TypeId="5" TypeName="EPI"/>
+
+      
    </Plugin>
    
    <Plugin Name="Volume"/>
@@ -49,7 +53,8 @@
       <Energy Type1="Medium" Type2="PROL">15.0</Energy>
       <Energy Type1="Medium" Type2="QUIE">10.0</Energy>
       <Energy Type1="Medium" Type2="NECR">10.0</Energy>
-      <Energy Type1="Medium" Type2="BOUND">30.0</Energy>
+      <Energy Type1="Medium" Type2="BOUND">10.0</Energy>
+      <Energy Type1="Medium" Type2="EPI">10.0</Energy>
       <Energy Type1="PROL" Type2="PROL">10.0</Energy>
       <Energy Type1="PROL" Type2="QUIE">10.0</Energy>
       <Energy Type1="PROL" Type2="NECR">10.0</Energy>
@@ -60,6 +65,12 @@
       <Energy Type1="BOUND" Type2="QUIE">100.0</Energy>
       <Energy Type1="BOUND" Type2="NECR">10.0</Energy>
       <Energy Type1="BOUND" Type2="BOUND">10.0</Energy>
+      
+      <Energy Type1="EPI" Type2="PROL">7.0</Energy>
+      <Energy Type1="EPI" Type2="QUIE">20.0</Energy>
+      <Energy Type1="EPI" Type2="NECR">10.0</Energy>
+      <Energy Type1="EPI" Type2="BOUND">10.0</Energy>
+      <Energy Type1="EPI" Type2="EPI">10.0</Energy>
       <NeighborOrder>4</NeighborOrder>
    </Plugin>
    

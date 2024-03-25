@@ -54,6 +54,39 @@ class ConstraintInitializerSteppable(SteppableBasePy):
             newCell.lambdaVolume = 1000
         
         
+        cellWidth  =  7  # how wide one cell is (pixels)
+        circleWidth= 50  # how wide the circle of cells is (pixels)
+        numCells   =  12  # number of cells in the circle
+        # center point of the CC3D window:
+        xMid=self.dim.x/2 # these will change automatically if the model's size is changed
+        yMid=self.dim.y/2
+        
+        # a list of the cell types that we are using for the circle, used to assign types 
+        # to the cells in the circle. Must be the all uppercase verson of the cell type
+        # names in the .xml file. You can omit types if you want.
+        cellTypeList=["self.EPI"]
+            
+        for iAng in range(numCells):  # iterate over number of cells to create
+            ang=2*3.14159/numCells*iAng # rotation angle, radians
+            # location of the center of this cell
+            xCellCenter=int(xMid - circleWidth/2.*math.cos(ang))
+            yCellCenter=int(yMid - circleWidth/2.*math.sin(ang))
+            # create a new CC3D cell, the cell type is assigned from the list of cell 
+            # types using iAng iterator as the index into the list
+            newCell = self.new_cell(eval(cellTypeList[ iAng %len(cellTypeList)])) 
+            # Iterate over all possible pixels for this cell
+            for ix in range(xCellCenter-cellWidth, xCellCenter+cellWidth+1):
+                for iy in range(yCellCenter-cellWidth, yCellCenter+cellWidth+1):
+                    # use this pixel if it is close enough to the cell's center
+                    if sqrt((ix-xCellCenter)**2+(iy-yCellCenter)**2) <= cellWidth/2:
+                        #this actually assigns this pixel to this cell
+                        self.cell_field[ix:ix+1, iy:iy+1, 0] = newCell
+                
+            # done with pixels for this cell, set its target colume
+            newCell.targetVolume = 75
+            newCell.lambdaVolume = 2.0
+        
+        
 class GrowthSteppable(SteppableBasePy):
     def __init__(self,frequency=1):
         SteppableBasePy.__init__(self, frequency)
@@ -89,6 +122,22 @@ class GrowthSteppable(SteppableBasePy):
             secretor.uptakeInsideCell(cell, 2.0, 0.01)
             if field[cell.xCOM, cell.yCOM, 0]<49:
                 self.delete_cell(cell)
+                
+        for cell in self.cell_list_by_type(self.PROL):
+            cellX = cell.xCOM
+            cellY = cell.yCOM
+            
+            vecX = 0
+            vecY = 0
+            if (cell.xCOM > 150 and cell.xCOM < 200 and cell.yCOM > 100 and cell.yCOM < 150):
+                vecX = cellX - 125
+                vecY = cellY - 125
+                print(cellX, " ",cellY)
+                print(vecX, " ",vecY)
+                cell.lambdaVecX = 5
+                cell.lambdaVecY = 0
+                cell.lambdaVecZ = 0
+            
             
             
         
