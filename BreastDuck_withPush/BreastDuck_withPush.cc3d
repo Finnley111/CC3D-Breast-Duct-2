@@ -1,0 +1,5 @@
+<Simulation version="4.4.1">
+   <XMLScript Type="XMLScript">Simulation/BreastDuck_withPush.xml</XMLScript>
+   <PythonScript Type="PythonScript">Simulation/BreastDuck_withPush.py</PythonScript>
+   <Resource Type="Python">Simulation/BreastDuck_withPushSteppables.py</Resource>
+</Simulation>
