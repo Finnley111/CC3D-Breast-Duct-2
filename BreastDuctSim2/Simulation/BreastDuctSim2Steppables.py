@@ -1,3 +1,5 @@
+from cc3d.cpp.PlayerPython import * 
+from cc3d import CompuCellSetup
 from cc3d.core.PySteppables import *
 import numpy as np
 import random
@@ -195,3 +197,79 @@ class MitosisSteppable(MitosisSteppableBase):
             # self.child_cell.type=1
 
         
+
+class Barrier_forcingSteppable(SteppableBasePy):
+    '''
+    JPS added
+    After a certain mcs select a few (cells2force) barrier cells and apply force on the them directed towards the center of the 
+    model window, which will be near the center of the tumor.
+    In this version the force is propotional to the distance to the center. You could normalize the force vector and get a constant 
+    force in the right direction that does not get bigger the bigger the distance to the center is.
+    If you set "self.forceFactor" equal to zero the code will create the forces but they wont do anything.
+    If the forcesa re too large the ring of BOUND cells may break.
+    In the "step" function the loop e.g., 
+        if mcs >= 500 and mcs % 100 == 0:
+    controls when to start forcing (MCS=500) and how often to update (every 100 MCS) the 
+    forcing directions. The set of cells being forced does not change.
+    '''
+    def __init__(self, frequency=1):
+        SteppableBasePy.__init__(self, frequency)
+        # created a cell-level vector visulizaiton field to show the forcing vectors
+        self.create_vector_field_cell_level_py("Cell_Forcing")
+
+    def start(self):
+        # randomly pick the cells that will be forced and add to a list
+        # need "self." if another part of this steppable needs access to the value.
+        cells2force = 5 # how many cells to apply the force to, the actual number will be +/-1 depending on the length of the cell list
+        skipCellsCount = len(self.cell_list_by_type(self.EPI)) // cells2force
+        self.forcedCellsList = []
+        self.forceFactor = 1.0  # "lambda" to scale the forces. The force on a cell is lambda*distance to center of modelon X,Y, and Z axes
+
+        print('\n\t creating forcing cells list for',cells2force,skipCellsCount,len(self.cell_list_by_type(self.EPI)))
+                
+        ### JPS the version below evenly spaces the forced cells around the circle
+        # i = 1
+        # for cell in self.cell_list_by_type(self.BOUND):
+            # if i % skipCellsCount == 0:
+                # self.forcedCellsList.append(cell)
+                # print('\t\t added cell:',i,cell.id)
+            # i += 1
+        # print('\n\t length forced cell list indexes:',len(self.forcedCellsList),'\n')
+        
+        ### JPS the version below randomly places the forced cells around the circle, 
+        ### the actual number of cells might be more or less than requested by cells2force
+        i = 1
+        for cell in self.cell_list_by_type(self.EPI):
+            if np.random.random() <= 1/skipCellsCount:
+                self.forcedCellsList.append(cell)
+                print('\t\t added cell:',i,cell.id)
+            i += 1
+        print('\n\t length forced cell list indexes:',len(self.forcedCellsList),'\n')
+
+    def step(self, mcs):
+        if mcs >= 200 and mcs % 100 == 0:  # dont force until after this many MCS and update the forces every this many MCS
+            # first need to "unfreeze" the BOUND cells since the BOUND cells start with lambdaVolume=1000, 
+            # which effectively freezes them in place. 
+            for cell in self.cell_list_by_type(self.EPI):
+                cell.lambdaVolume = 10.
+            
+            for cell in self.forcedCellsList:
+                #print(cell.id,cell.type)
+                dX = (cell.xCOM - self.dim.x/2) * self.forceFactor
+                dY = (cell.yCOM - self.dim.y/2) * self.forceFactor
+                dZ = (0) * self.forceFactor
+                # Make sure ExternalPotential plugin is loaded
+                cell.lambdaVecX = dX  # force component pointing along X axis - towards positive X's
+                cell.lambdaVecY = dY  # force component pointing along Y axis - towards negative Y's
+                cell.lambdaVecZ = dZ  # force component pointing along Z axis
+
+                # update the vector field display
+                field = self.field.Cell_Forcing
+                field[cell] = [-cell.lambdaVecX, -cell.lambdaVecY, -cell.lambdaVecZ]
+        
+
+    def finish(self):
+        return
+
+    def on_stop(self):
+        return
